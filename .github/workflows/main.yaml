@@ -81,3 +81,38 @@ jobs:
         run: inso run test dadjokes-api-test -e ${{ env.TARGET_ENVIRONMENT }} --ci
         env:
           TARGET_ENVIRONMENT: AWS
+
+  publish-dadjokes-api-to-portal:
+    name: Publish Dad Jokes API to Dev Portal
+    needs: deploy-dadjokes-api
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v1
+
+      #Install dev tools
+      - name: Install NodeJS
+        uses: actions/setup-node@v1
+      - name: Install inso and kong-portal cli
+        run: npm install -g insomnia-inso@2.3.0 kong-portal-cli@3.1.0 
+     
+      # Prepare Dad Jokes OAS spec to the Dev Portal
+      - name: Prepare Server URL for Spec
+        uses: cschleiden/replace-tokens@v1
+        with:
+          tokenPrefix: '${'
+          tokenSuffix: '}$'
+          files: '["./.insomnia/ApiSpec/*.yml"]'
+        env:
+          UPSTREAM_SERVER_URL: '${{ secrets.KONG_PROXY_ADDR }}'    
+          
+      - name: Enable Dev Portal on Workspace  
+        run: |
+          curl -sL -k -X PATCH ${{ secrets.KONG_ADMIN_ADDR }}/workspaces/${{ secrets.KONG_WORKSPACE }} --data "config.portal=true"
+                
+      - name: Deploy to dev portal
+        run: |          
+          inso export spec dadjokes-api --output workspaces/dadjokes/specs/dadjokes.yaml
+          portal deploy -D --preserve dadjokes
+        env:
+          KONG_ADMIN_URL: ${{ secrets.KONG_ADMIN_ADDR }}   
