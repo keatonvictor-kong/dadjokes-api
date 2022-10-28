@@ -1,15 +1,19 @@
 _id: env_env_aaeebe572189fd26dca4a74efab0e4ddb277d6db_sub
 type: Environment
 parentId: env_aaeebe572189fd26dca4a74efab0e4ddb277d6db
-modified: 1666957637995
+modified: 1666958266463
 created: 1666957637995
-name: OpenAPI env
+name: AWS
 data:
   scheme:
     - http
-  base_path: $%7BUPSTREAM_SERVER_URL%7D$
+  base_path: https://flzm2nqaozgfo4xpvu353d5eey0icerp.lambda-url.eu-west-3.on.aws
   host: ""
-dataPropertyOrder: null
+dataPropertyOrder:
+  "&":
+    - scheme
+    - base_path
+    - host
 color: null
 isPrivate: false
 metaSortKey: 1666957637995
