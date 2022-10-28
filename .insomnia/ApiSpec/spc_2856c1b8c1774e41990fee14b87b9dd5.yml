@@ -1,32 +1,33 @@
 _id: spc_2856c1b8c1774e41990fee14b87b9dd5
 type: ApiSpec
 parentId: wrk_d3eaa21e0f6b48629603b9e87e532a0f
-modified: 1666956286298
+modified: 1666957638001
 created: 1666956161038
 fileName: dadjokes-api
-contents: |-
-    openapi: "3.0.0"
-    info:
-      version: 1.0.0
-      title: dadjokes
-      license:
-        name: Kong
-    servers:
-      - url: ${UPSTREAM_SERVER_URL}$
-        description: Upstream server URL.
-    paths:
-      /:
-        get:
-          summary: Get a random dad jokes
-          operationId: getDadJokes
-          tags:
-            - dadjokes
+contents: >-
+  openapi: "3.0.0"
 
-          responses:
-            '200':
-              description: A random dad joke
-              content:
-                application/json:
-                  example:
-                    dadjoke: How many tickles does it take to make an octopus laugh? Ten tickles.
+  info:
+    version: 1.0.0
+    title: dadjokes
+    license:
+      name: Kong
+  servers:
+    - url: ${UPSTREAM_SERVER_URL}$
+      description: Upstream server URL.
+  paths:
+    /:
+      get:
+        summary: Get a random dad jokes
+        operationId: getDadJokes
+        tags:
+          - dadjokes
+
+        responses:
+          '200':
+            description: A random dad joke
+            content:
+              application/json:
+                example:
+                  dadjoke: How many tickles does it take to make an octopus laugh? Ten tickles.
 contentType: yaml
