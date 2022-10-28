@@ -3,6 +3,6 @@ type: Workspace
 parentId: null
 modified: 1666956161037
 created: 1666956161037
-name: dadjokes
+name: dadjokes-api
 description: ""
 scope: design
