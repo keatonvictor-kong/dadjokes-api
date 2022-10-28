@@ -75,3 +75,9 @@ jobs:
       # Deploy to Kong
       - name: Deploy to Kong
         run: deck sync --workspace ${{ secrets.KONG_WORKSPACE }} --kong-addr ${{ secrets.KONG_ADMIN_ADDR }} -s kong.yaml -s ./workspaces/dadjokes/dadjokes.yaml --tls-skip-verify
+
+      # Run API tests
+      - name: Run test suites
+        run: inso run test dadjokes-api-test -e ${{ env.TARGET_ENVIRONMENT }} --ci
+        env:
+          TARGET_ENVIRONMENT: AWS
