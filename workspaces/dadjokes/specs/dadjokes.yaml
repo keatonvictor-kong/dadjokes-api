@@ -1,0 +1,24 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: dadjokes
+  license:
+    name: Kong
+servers:
+  - url: ${UPSTREAM_SERVER_URL}$
+    description: Upstream server URL.
+paths:
+  /:
+    get:
+      summary: Get a random dad jokes
+      operationId: getDadJokes
+      tags:
+        - dadjokes
+
+      responses:
+        '200':
+          description: A random dad joke
+          content:
+            application/json:
+              example:
+                dadjoke: How many tickles does it take to make an octopus laugh? Ten tickles.
