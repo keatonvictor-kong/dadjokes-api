@@ -117,7 +117,9 @@ jobs:
           KONG_ADMIN_URL: ${{ secrets.KONG_ADMIN_ADDR }}   
 
       - name: Deploy to dev portal (part 2)
-        run: |         
+        run: |  
+          portal -v 
+          portal enable dadjokes      
           portal deploy -D --preserve dadjokes
         env:
           KONG_ADMIN_URL: ${{ secrets.KONG_ADMIN_ADDR }}             
