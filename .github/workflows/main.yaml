@@ -74,7 +74,7 @@ jobs:
           deck validate --kong-addr ${{ secrets.KONG_ADMIN_ADDR }} -s kong.yaml -s ./workspaces/dadjokes/dadjokes.yaml --tls-skip-verify
       # Deploy to Kong
       - name: Deploy to Kong
-        run: deck sync --workspace ${{ secrets.KONG_WORKSPACE }} --kong-addr ${{ secrets.KONG_ADMIN_ADDR }} -s kong.yaml -s ./workspaces/dadjokes/dadjokes.yaml --tls-skip-verify
+        run: deck sync --workspace dadjokes --kong-addr ${{ secrets.KONG_ADMIN_ADDR }} -s kong.yaml -s ./workspaces/dadjokes/dadjokes.yaml --tls-skip-verify
 
       # Run API tests
       - name: Run test suites
@@ -108,16 +108,16 @@ jobs:
           
       - name: Enable Dev Portal on Workspace  
         run: |
-          curl -sL -k -X PATCH ${{ secrets.KONG_ADMIN_ADDR }}/workspaces/${{ secrets.KONG_WORKSPACE }} --data "config.portal=true"
+          curl -sL -k -X PATCH ${{ secrets.KONG_ADMIN_ADDR }}/workspaces/dadjokes --data "config.portal=true"
                 
       - name: Deploy to dev portal (part 1)
         run: |          
-          inso export spec dadjokes-api --output workspaces/${{ secrets.KONG_WORKSPACE }}/specs/dadjokes.yaml
+          inso export spec dadjokes-api --output workspaces/dadjokes/specs/dadjokes.yaml
         env:
           KONG_ADMIN_URL: ${{ secrets.KONG_ADMIN_ADDR }}   
 
       - name: Deploy to dev portal (part 2)
         run: |         
-          portal deploy -D --preserve ${{ secrets.KONG_WORKSPACE }}
+          portal deploy -D --preserve dadjokes
         env:
           KONG_ADMIN_URL: ${{ secrets.KONG_ADMIN_ADDR }}             
