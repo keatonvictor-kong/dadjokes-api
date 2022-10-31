@@ -118,6 +118,6 @@ jobs:
 
       - name: Deploy to dev portal (part 2)
         run: |         
-          portal deploy -D --watch dadjokes
+          portal deploy -D --preserve customer
         env:
           KONG_ADMIN_URL: ${{ secrets.KONG_ADMIN_ADDR }}             
