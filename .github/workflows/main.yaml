@@ -108,16 +108,16 @@ jobs:
           
       - name: Enable Dev Portal on Workspace  
         run: |
-          curl -sL -k -X PATCH ${{ secrets.KONG_ADMIN_ADDR }}/workspaces/customer --data "config.portal=true"
+          curl -sL -k -X PATCH ${{ secrets.KONG_ADMIN_ADDR }}/workspaces/dadjokes --data "config.portal=true"
                 
       - name: Deploy to dev portal (part 1)
         run: |          
-          inso export spec dadjokes-api --output workspaces/customer/specs/dadjokes.yaml
+          inso export spec dadjokes-api --output workspaces/dadjokes/specs/dadjokes.yaml
         env:
           KONG_ADMIN_URL: ${{ secrets.KONG_ADMIN_ADDR }}   
 
       - name: Deploy to dev portal (part 2)
         run: |         
-          portal deploy -D --preserve customer
+          portal deploy -D --preserve dadjokes
         env:
           KONG_ADMIN_URL: ${{ secrets.KONG_ADMIN_ADDR }}             
