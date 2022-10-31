@@ -110,9 +110,14 @@ jobs:
         run: |
           curl -sL -k -X PATCH ${{ secrets.KONG_ADMIN_ADDR }}/workspaces/${{ secrets.KONG_WORKSPACE }} --data "config.portal=true"
                 
-      - name: Deploy to dev portal
+      - name: Deploy to dev portal (part 1)
         run: |          
           inso export spec dadjokes-api --output workspaces/dadjokes/specs/dadjokes.yaml
-          portal deploy -D --preserve dadjokes
         env:
           KONG_ADMIN_URL: ${{ secrets.KONG_ADMIN_ADDR }}   
+
+      - name: Deploy to dev portal (part 2)
+        run: |         
+          portal deploy -D --preserve dadjokes
+        env:
+          KONG_ADMIN_URL: ${{ secrets.KONG_ADMIN_ADDR }}             
