@@ -106,9 +106,9 @@ jobs:
         env:
           UPSTREAM_SERVER_URL: '${{ secrets.KONG_PROXY_ADDR }}'    
           
-      - name: Enable Dev Portal on Workspace  
-        run: |
-          curl -sL -k -X PATCH ${{ secrets.KONG_ADMIN_ADDR }}/workspaces/dadjokes 'kong-admin-token:${{ secrets.KONG_ADMIN_TOKEN }}' --data "config.portal=true"
+      # - name: Enable Dev Portal on Workspace  
+      #   run: |
+      #     curl -sL -k -X PATCH ${{ secrets.KONG_ADMIN_ADDR }}/workspaces/dadjokes 'kong-admin-token:${{ secrets.KONG_ADMIN_TOKEN }}' --data "config.portal=true"
                 
       - name: Deploy to dev portal (part 1)
         run: |          
