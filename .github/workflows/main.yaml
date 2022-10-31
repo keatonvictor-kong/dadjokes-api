@@ -74,7 +74,7 @@ jobs:
           deck validate --kong-addr ${{ secrets.KONG_ADMIN_ADDR }} -s kong.yaml -s ./workspaces/dadjokes/dadjokes.yaml --tls-skip-verify
       # Deploy to Kong
       - name: Deploy to Kong
-        run: deck sync --workspace dadjokes --kong-addr ${{ secrets.KONG_ADMIN_ADDR }} -s kong.yaml -s ./workspaces/dadjokes/dadjokes.yaml --tls-skip-verify
+        run: deck sync --workspace ${{ secrets.KONG_WORKSPACE }} --kong-addr ${{ secrets.KONG_ADMIN_ADDR }} -s kong.yaml -s ./workspaces/dadjokes/dadjokes.yaml --tls-skip-verify
 
       # Run API tests
       - name: Run test suites
@@ -94,7 +94,7 @@ jobs:
       - name: Install NodeJS
         uses: actions/setup-node@v1
       - name: Install inso and kong-portal cli
-        run: npm install -g insomnia-inso@2.3.0 kong-portal-cli@3.4.0 
+        run: npm install -g insomnia-inso@2.3.0 kong-portal-cli@3.1.0 
      
       # Prepare Dad Jokes OAS spec to the Dev Portal
       - name: Prepare Server URL for Spec
@@ -108,16 +108,16 @@ jobs:
           
       - name: Enable Dev Portal on Workspace  
         run: |
-          curl -sL -k -X PATCH ${{ secrets.KONG_ADMIN_ADDR }}/workspaces/dadjokes --data "config.portal=true"
+          curl -sL -k -X PATCH ${{ secrets.KONG_ADMIN_ADDR }}/workspaces/${{ secrets.KONG_WORKSPACE }} --data "config.portal=true"
                 
       - name: Deploy to dev portal (part 1)
         run: |          
-          inso export spec dadjokes-api --output workspaces/dadjokes/specs/dadjokes.yaml
+          inso export spec dadjokes-api --output workspaces/${{ secrets.KONG_WORKSPACE }}/specs/dadjokes.yaml
         env:
           KONG_ADMIN_URL: ${{ secrets.KONG_ADMIN_ADDR }}   
 
       - name: Deploy to dev portal (part 2)
         run: |         
-          portal deploy -D --preserve dadjokes
+          portal deploy -D --preserve ${{ secrets.KONG_WORKSPACE }}
         env:
           KONG_ADMIN_URL: ${{ secrets.KONG_ADMIN_ADDR }}             
