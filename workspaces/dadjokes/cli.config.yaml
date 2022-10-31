@@ -1,6 +1,6 @@
 # Kong Admin URL
 # @required
-kong_admin_url: ''
+kong_admin_url: 'http://a1aa20bf57de2490d8b83c3aef0bf03a-752696628.eu-west-3.elb.amazonaws.com:8001'
 
 # Kong Admin Token
 # @optional
