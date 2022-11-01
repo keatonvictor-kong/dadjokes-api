@@ -55,6 +55,9 @@ jobs:
         run: |
           inso generate config dadjokes-api --type declarative --tags $TAG --output kong.yaml 
           cat kong.yaml
+          sed "s/[$]//g" kong.yaml > kong2.yaml
+          cat kong2.yaml > kong.yaml
+          cat kong.yaml
         env:
           TAG: dadjokes-api
       
