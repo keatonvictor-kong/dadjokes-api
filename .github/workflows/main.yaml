@@ -115,7 +115,17 @@ jobs:
           files: '["./.insomnia/ApiSpec/*.yml"]'
         env:
           UPSTREAM_SERVER_URL: '${{ secrets.KONG_PROXY_ADDR }}'    
-          
+
+      - name: Replace Kong Admin Url in workspace config
+        uses: cschleiden/replace-tokens@v1
+        with:
+          tokenPrefix: '${'
+          tokenSuffix: '}$'
+          files: '["./workspaces/dadjokes/cli.conf.yaml"]'
+        env:
+          KONG_ADMIN_URL: '${{ secrets.KONG_ADMIN_ADDR }}'          
+
+
       - name: Enable Dev Portal on Workspace  
         run: |
           portal enable -D ${{ secrets.KONG_WORKSPACE }}
