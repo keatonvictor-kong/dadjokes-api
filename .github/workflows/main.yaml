@@ -1,6 +1,6 @@
 # This is a basic workflow for APIOps
 
-name: CI
+name: Dad Jokes API Deployment
 
 # Controls when the action will run. 
 on:
@@ -24,19 +24,22 @@ jobs:
         run: |
           mkdir ./spec
           mkdir ./spec-backup
+
       - name: Backup Insomnia Spec
         run: |
           cp ./.insomnia/ApiSpec/*.yml ./spec-backup
           ls ./spec-backup 
-      #Install dev tools
-      - name: Install NodeJS
+
+      - name: Install Dev Tools (NodeJS)
         uses: actions/setup-node@v1
-      - name: Install Deck  
+
+      - name: Install Dev Tools (Deck)
         run: |
           curl -sL https://github.com/kong/deck/releases/download/v1.6.0/deck_1.6.0_linux_amd64.tar.gz -o deck.tar.gz
           tar -xf deck.tar.gz -C /tmp
           sudo cp /tmp/deck /usr/local/bin/ 
-      - name: Install inso
+
+      - name: Install Dev Tools (Inso)
         run: npm install -g insomnia-inso@2.3.0
 
       - name: Prepare Upstream URL for Kong declarative config
@@ -48,7 +51,6 @@ jobs:
         env:
           UPSTREAM_SERVER_URL: '${{ secrets.UPSTREAM_SERVER_URL }}'
       
-      # Generate declarative config
       - name: Generate Kong declarative config
         run: |
           inso generate config dadjokes-api --type declarative --tags $TAG --output kong.yaml 
@@ -81,11 +83,10 @@ jobs:
       - name: Validate the Declarative Config File
         run: |
           deck validate --kong-addr ${{ secrets.KONG_ADMIN_ADDR }} -s kong.yaml -s ./workspaces/dadjokes/dadjokes.yaml --tls-skip-verify
-      # Deploy to Kong
+     
       - name: Deploy to Kong
         run: deck sync --workspace ${{ secrets.KONG_WORKSPACE }} --kong-addr ${{ secrets.KONG_ADMIN_ADDR }} -s kong.yaml -s ./workspaces/dadjokes/dadjokes.yaml --tls-skip-verify
 
-      # Run API tests
       - name: Run test suites
         run: inso run test dadjokes-api-test -e ${{ env.TARGET_ENVIRONMENT }} --ci
         env:
@@ -96,16 +97,16 @@ jobs:
     needs: deploy-dadjokes-api
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout branch
-        uses: actions/checkout@v1
 
-      #Install dev tools
-      - name: Install NodeJS
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install Dev Tools (NodeJS)
         uses: actions/setup-node@v1
-      - name: Install inso and kong-portal cli
+
+      - name: Install Dev Tools (Inso + Portal CLI)
         run: npm install -g insomnia-inso@2.3.0 kong-portal-cli@3.1.0 
      
-      # Prepare Dad Jokes OAS spec to the Dev Portal
       - name: Prepare Server URL for Spec
         uses: cschleiden/replace-tokens@v1
         with:
