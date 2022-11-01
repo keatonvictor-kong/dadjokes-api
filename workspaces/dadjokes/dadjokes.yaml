@@ -8,54 +8,54 @@ consumers:
 plugins:
 
 
-- name: cors
-  service: dadjokes
-  config: 
-    origins:
-    - '*'
-    methods:
-    - GET
-    headers:
-    - Accept
-    - Accept-Version
-    - Content-Length
-    - Content-MD5
-    - Content-Type
-    - Date
-    - X-Auth-Token
-    exposed_headers:
-    - X-Auth-Token
-    credentials: true
-    max_age: 3600
+# - name: cors
+#   service: dadjokes
+#   config: 
+#     origins:
+#     - '*'
+#     methods:
+#     - GET
+#     headers:
+#     - Accept
+#     - Accept-Version
+#     - Content-Length
+#     - Content-MD5
+#     - Content-Type
+#     - Date
+#     - X-Auth-Token
+#     exposed_headers:
+#     - X-Auth-Token
+#     credentials: true
+#     max_age: 3600
 
-- name: mocking
-  service: dadjokes
-  enabled: false
-  config: 
-    random_examples: true
-    api_specification_filename: dadjokes.yaml
+# - name: mocking
+#   service: dadjokes
+#   enabled: false
+#   config: 
+#     random_examples: true
+#     api_specification_filename: dadjokes.yaml
 
-- name: key-auth
-  service: dadjokes
-  enabled: true
-  config: 
-    key_in_header: true
-    key_in_query: false
-    key_in_body: false
-    key_names:
-    - apikey
+# - name: key-auth
+#   service: dadjokes
+#   enabled: true
+#   config: 
+#     key_in_header: true
+#     key_in_query: false
+#     key_in_body: false
+#     key_names:
+#     - apikey
 
-- name: rate-limiting
-  service: dadjokes
-  enabled: true
-  config:
-    policy: local  
-    limit_by: consumer
-    minute: 5 
-    fault_tolerant: true
-    hide_client_headers: false
-  protocols:
-  - grpc
-  - grpcs
-  - http
-  - https
+# - name: rate-limiting
+#   service: dadjokes
+#   enabled: true
+#   config:
+#     policy: local  
+#     limit_by: consumer
+#     minute: 5 
+#     fault_tolerant: true
+#     hide_client_headers: false
+#   protocols:
+#   - grpc
+#   - grpcs
+#   - http
+#   - https
