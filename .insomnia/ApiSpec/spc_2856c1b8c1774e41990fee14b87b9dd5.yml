@@ -31,8 +31,8 @@ contents: >-
                 examples:
                   example1:
                     value:
-                      dadjoke: How many tickles does it take to make an octopus laugh? Ten tickles.
+                      dadjoke: A really bad mocked joke 1
                   example2:
                     value:
-                      dadjoke: What do a tick and the Eiffel Tower have in common? ... They are both Paris sites.
+                      dadjoke: A really bad mocked joke 2
 contentType: yaml
