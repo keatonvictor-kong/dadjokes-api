@@ -65,6 +65,15 @@ jobs:
         env:
           ALICE_API_KEY: '${{ secrets.ALICE_API_KEY }}'
 
+      - name: Replace Kong Admin Url in workspace config
+        uses: cschleiden/replace-tokens@v1
+        with:
+          tokenPrefix: '${'
+          tokenSuffix: '}$'
+          files: '["./workspaces/dadjokes/cli.conf.yaml"]'
+        env:
+          KONG_ADMIN_URL: '${{ secrets.KONG_ADMIN_ADDR }}'          
+
       - name: Check connectivity to Kong Control Plane
         run: |
           deck ping --kong-addr ${{ secrets.KONG_ADMIN_ADDR }} --tls-skip-verify
