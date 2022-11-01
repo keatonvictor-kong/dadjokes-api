@@ -7,6 +7,13 @@ consumers:
 
 plugins:
 
+- name: mocking
+  service: dadjokes
+  enabled: true
+  config: 
+    random_examples: true
+    api_specification_filename: dadjokes.yaml
+
 - name: key-auth
   service: dadjokes
   enabled: true
