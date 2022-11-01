@@ -10,7 +10,7 @@ servers:
 paths:
   /:
     get:
-      summary: Get a random dad jokes
+      summary: Get a random dad joke
       operationId: getDadJokes
       tags:
         - dadjokes
