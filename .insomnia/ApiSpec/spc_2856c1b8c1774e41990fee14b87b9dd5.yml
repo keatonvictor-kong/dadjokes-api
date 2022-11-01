@@ -1,7 +1,7 @@
 _id: spc_2856c1b8c1774e41990fee14b87b9dd5
 type: ApiSpec
 parentId: wrk_d3eaa21e0f6b48629603b9e87e532a0f
-modified: 1667241560390
+modified: 1667305399768
 created: 1666956161038
 fileName: dadjokes-api
 contents: >-
@@ -28,8 +28,11 @@ contents: >-
             description: A random dad joke
             content:
               application/json:
-                example:
-                  dadjoke: How many tickles does it take to make an octopus laugh? Ten tickles.
-          '400':
-            description: A random dad joke             
+                examples:
+                  example1:
+                    value:
+                      dadjoke: How many tickles does it take to make an octopus laugh? Ten tickles.
+                  example2:
+                    value:
+                      dadjoke: What do a tick and the Eiffel Tower have in common? ... They are both Paris sites.
 contentType: yaml

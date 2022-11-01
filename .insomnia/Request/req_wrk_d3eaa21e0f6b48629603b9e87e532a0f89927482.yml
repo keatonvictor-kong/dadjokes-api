@@ -1,10 +1,10 @@
 _id: req_wrk_d3eaa21e0f6b48629603b9e87e532a0f89927482
 type: Request
 parentId: wrk_d3eaa21e0f6b48629603b9e87e532a0f
-modified: 1666972189125
+modified: 1667305534937
 created: 1666957637992
-url: "{{ base_url }}/"
-name: Get a random dad jokes
+url: "{{ base_url }}/random"
+name: Get a random dad joke
 description: ""
 method: GET
 body: {}
