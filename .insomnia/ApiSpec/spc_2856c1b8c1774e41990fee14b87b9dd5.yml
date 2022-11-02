@@ -1,12 +1,11 @@
 _id: spc_2856c1b8c1774e41990fee14b87b9dd5
 type: ApiSpec
 parentId: wrk_d3eaa21e0f6b48629603b9e87e532a0f
-modified: 1667305399768
+modified: 1667380086211
 created: 1666956161038
 fileName: dadjokes-api
-contents: >-
+contents: |-
   openapi: "3.0.0"
-
   info:
     version: 1.0.0
     title: dadjokes

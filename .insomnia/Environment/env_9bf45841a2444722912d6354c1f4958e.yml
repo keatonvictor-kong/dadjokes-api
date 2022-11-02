@@ -1,0 +1,19 @@
+_id: env_9bf45841a2444722912d6354c1f4958e
+type: Environment
+parentId: env_aaeebe572189fd26dca4a74efab0e4ddb277d6db
+modified: 1667380066950
+created: 1667380039229
+name: Kong Gateway
+data:
+  scheme:
+    - http
+  base_path: ""
+  host: aa57c53bd82384cd49d1151ef332cd75-772223699.eu-west-3.elb.amazonaws.com:80
+dataPropertyOrder:
+  "&":
+    - scheme
+    - base_path
+    - host
+color: null
+isPrivate: false
+metaSortKey: 1666957638045
