@@ -9,7 +9,7 @@ plugins:
 
 - name: mocking
   service: dadjokes
-  enabled: false
+  enabled: true
   config: 
     random_examples: true
     api_specification_filename: dadjokes.yaml
