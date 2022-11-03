@@ -17,32 +17,27 @@ jobs:
     runs-on: ubuntu-latest    
     steps:
 
-      - name: Checkout repository
+      - name: (Step 01) Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Create temp dirs
+      - name: (Step 02) Backup Specs
         run: |
           mkdir ./spec
           mkdir ./spec-backup
-
-      - name: Backup Insomnia Spec
-        run: |
           cp ./.insomnia/ApiSpec/*.yml ./spec-backup
-          ls ./spec-backup 
+          ls ./spec-backup           
 
-      - name: Install Dev Tools (NodeJS)
+      - name: (Step 03) Install NodeJS
         uses: actions/setup-node@v1
 
-      - name: Install Dev Tools (Deck)
+      - name: (Step 04) Install Dev Tools (Deck + Inso)
         run: |
           curl -sL https://github.com/kong/deck/releases/download/v1.6.0/deck_1.6.0_linux_amd64.tar.gz -o deck.tar.gz
           tar -xf deck.tar.gz -C /tmp
           sudo cp /tmp/deck /usr/local/bin/ 
+          npm install -g insomnia-inso@2.3.0
 
-      - name: Install Dev Tools (Inso)
-        run: npm install -g insomnia-inso@2.3.0
-
-      - name: Prepare Upstream URL for Kong declarative config
+      - name: (Step 05) Inject Upstream URL into APISpec
         uses: cschleiden/replace-tokens@v1
         with:
           tokenPrefix: '${'
@@ -51,7 +46,7 @@ jobs:
         env:
           UPSTREAM_SERVER_URL: '${{ secrets.UPSTREAM_SERVER_URL }}'
       
-      - name: Generate Kong declarative config
+      - name: (Step 06) Generate Kong declarative config
         run: |
           inso generate config dadjokes-api --type declarative --tags $TAG --output kong.yaml 
           cat kong.yaml
@@ -61,7 +56,7 @@ jobs:
         env:
           TAG: dadjokes-api
       
-      - name: Replace API Key in workspace config
+      - name: (Step 07) Inject secrets into declaritive config
         uses: cschleiden/replace-tokens@v1
         with:
           tokenPrefix: '${'
@@ -70,7 +65,7 @@ jobs:
         env:
           ALICE_API_KEY: '${{ secrets.ALICE_API_KEY }}'
 
-      - name: Replace Kong Admin Url in workspace config
+      - name: (Step 08) Inject Kong Workspace settings
         uses: cschleiden/replace-tokens@v1
         with:
           tokenPrefix: '${'
@@ -79,38 +74,39 @@ jobs:
         env:
           KONG_ADMIN_URL: '${{ secrets.KONG_ADMIN_ADDR }}'          
 
-      - name: Check connectivity to Kong Control Plane
+      - name: (Step 09) Check Kong Control Plane connectivity
         run: |
           deck ping --kong-addr ${{ secrets.KONG_ADMIN_ADDR }} --tls-skip-verify
       
-      - name: Validate the Declarative Config File
+      - name: (Step 10) Validate Kong declarative config
         run: |
           deck validate --kong-addr ${{ secrets.KONG_ADMIN_ADDR }} -s kong.yaml -s ./workspaces/dadjokes/dadjokes.yaml --tls-skip-verify
      
-      - name: Deploy to Kong
+      - name: (Step 11) Deploy to Kong Gateway
         run: deck sync --workspace ${{ secrets.KONG_WORKSPACE }} --kong-addr ${{ secrets.KONG_ADMIN_ADDR }} -s kong.yaml -s ./workspaces/dadjokes/dadjokes.yaml --tls-skip-verify
 
-      - name: Run test suites
+      - name: (Step 12) Run Kong test suite
         run: inso run test dadjokes-api-test -e ${{ env.TARGET_ENVIRONMENT }} --ci
         env:
           TARGET_ENVIRONMENT: AWS
 
   publish-dadjokes-api-to-portal:
+
     name: Publish Dad Jokes API to Dev Portal
     needs: deploy-dadjokes-api
     runs-on: ubuntu-latest
     steps:
 
-      - name: Checkout repository
+      - name: (Step 01) Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Install Dev Tools (NodeJS)
+      - name: (Step 02) Install NodeJS
         uses: actions/setup-node@v1
 
-      - name: Install Dev Tools (Inso + Portal CLI)
+      - name: (Step 03) Install Dev Tools (Inso + Portal CLI)
         run: npm install -g insomnia-inso@2.3.0 kong-portal-cli@3.1.0 
      
-      - name: Prepare Server URL for Spec
+      - name: (Step 04) Inject Upstream URL into APISpec
         uses: cschleiden/replace-tokens@v1
         with:
           tokenPrefix: '${'
@@ -119,7 +115,7 @@ jobs:
         env:
           UPSTREAM_SERVER_URL: '${{ secrets.KONG_PROXY_ADDR }}'    
 
-      - name: Replace Kong Admin Url in workspace config
+      - name: (Step 05) Inject Kong Workspace settings
         uses: cschleiden/replace-tokens@v1
         with:
           tokenPrefix: '${'
@@ -128,13 +124,9 @@ jobs:
         env:
           KONG_ADMIN_URL: '${{ secrets.KONG_ADMIN_ADDR }}'          
 
-
-      - name: Enable Dev Portal on Workspace  
+      - name: (Step 06) Deploy to Kong Dev Portal
         run: |
-          portal enable -D ${{ secrets.KONG_WORKSPACE }}
-                
-      - name: Deploy to Dev Portal
-        run: |          
+          portal enable -D ${{ secrets.KONG_WORKSPACE }}       
           inso export spec dadjokes-api --output workspaces/${{ secrets.KONG_WORKSPACE }}/specs/dadjokes.yaml
           portal deploy -D --preserve ${{ secrets.KONG_WORKSPACE }}
         env:
