@@ -41,3 +41,13 @@ plugins:
   - grpcs
   - http
   - https
+
+- name: key-auth
+  service: dadjokes
+  enabled: true
+  config: 
+    key_in_header: true
+    key_in_query: false
+    key_in_body: false
+    key_names:
+    - apikey
