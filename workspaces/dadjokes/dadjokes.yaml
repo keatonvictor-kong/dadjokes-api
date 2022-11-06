@@ -7,13 +7,6 @@ consumers:
 
 plugins:
 
-# - name: mocking
-#   service: dadjokes
-#   enabled: true
-#   config: 
-#     random_examples: true
-#     api_specification_filename: dadjokes.yaml
-
 - name: cors
   service: dadjokes
   config: 
