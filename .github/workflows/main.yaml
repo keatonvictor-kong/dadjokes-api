@@ -1,6 +1,6 @@
 # This is a basic workflow for APIOps
 
-name: Dad Jokes API Deployment
+name: Dad Jokes API (Deployment)
 
 # Controls when the action will run. 
 on:
@@ -55,17 +55,8 @@ jobs:
           cat kong.yaml
         env:
           TAG: dadjokes-api
-      
-      - name: (Step 07) Inject secrets into declaritive config
-        uses: cschleiden/replace-tokens@v1
-        with:
-          tokenPrefix: '${'
-          tokenSuffix: '}$'
-          files: '["./workspaces/dadjokes/dadjokes.yaml"]'
-        env:
-          ALICE_API_KEY: '${{ secrets.ALICE_API_KEY }}'
 
-      - name: (Step 08) Inject Kong Workspace settings
+      - name: (Step 07) Inject Kong Workspace settings
         uses: cschleiden/replace-tokens@v1
         with:
           tokenPrefix: '${'
@@ -74,18 +65,16 @@ jobs:
         env:
           KONG_ADMIN_URL: '${{ secrets.KONG_ADMIN_ADDR }}'          
 
-      - name: (Step 09) Check Kong Control Plane connectivity
+      
+      - name: (Step 08) Validate Kong declarative config
         run: |
           deck ping --kong-addr ${{ secrets.KONG_ADMIN_ADDR }} --tls-skip-verify
-      
-      - name: (Step 10) Validate Kong declarative config
-        run: |
           deck validate --kong-addr ${{ secrets.KONG_ADMIN_ADDR }} -s kong.yaml -s ./workspaces/dadjokes/dadjokes.yaml --tls-skip-verify
      
-      - name: (Step 11) Deploy to Kong Gateway
+      - name: (Step 09) Deploy to Kong Gateway
         run: deck sync --workspace ${{ secrets.KONG_WORKSPACE }} --kong-addr ${{ secrets.KONG_ADMIN_ADDR }} -s kong.yaml -s ./workspaces/dadjokes/dadjokes.yaml --tls-skip-verify
 
-      - name: (Step 12) Run Kong test suite
+      - name: (Step 10) Run Kong test suite
         run: inso run test dadjokes-api-test -e ${{ env.TARGET_ENVIRONMENT }} --ci
         env:
           TARGET_ENVIRONMENT: AWS
