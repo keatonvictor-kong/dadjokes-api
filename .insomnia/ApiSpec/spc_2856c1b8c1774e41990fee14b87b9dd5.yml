@@ -12,7 +12,7 @@ contents: |-
     license:
       name: Kong
   servers:
-    - url: ${UPSTREAM_SERVER_URL}$
+    - url: ${UPSTREAM_SERVER_URL}
       description: Upstream server URL.
   paths:
     /random:

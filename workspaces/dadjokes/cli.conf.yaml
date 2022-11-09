@@ -1,6 +1,6 @@
 # Kong Admin URL
 # @required
-kong_admin_url: '${KONG_ADMIN_URL}$'
+kong_admin_url: '${KONG_ADMIN_URL}'
 
 # Kong Admin Token
 # @optional
